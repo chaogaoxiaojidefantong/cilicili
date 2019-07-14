@@ -1,0 +1,100 @@
+body{
+	/*background:pink;*/
+}
+*{
+	margin:0px;
+	padding:0px;
+	/* CSS RESET:样式重置, 目的是为了让当前页面的所有的标签能够在不同的浏览器中显示的初始样式是一致的!! */
+}
+
+/* ----- header ----- */
+#header{
+	width:1200px;
+	height:72px;
+	/*background:pink;*/
+	margin:42px auto;
+}
+#header .logo{/* logo图片 */
+	margin:0px 33px 0px 50px;
+	vertical-align: middle;/* 能够和行内其他元素的中线对齐 */
+}
+#header .line{/* 分割线(竖线) */
+	border:2px solid #cbcbcb;
+	height:68px; 
+	display:inline-block;/* 为了span能够设置宽高 */
+	margin-right:22px;
+	vertical-align: middle;/* 能够和行内其他元素的中线对齐 */
+}
+#header .wel-login{
+	font-size:36px;
+	color:#cbcbcb;
+	vertical-align: middle;/* 能够和行内其他元素的中线对齐 */
+}
+
+
+/* ------ main ------ */
+#main{
+	width:1200px;
+	/*height:500px;*/
+	/*background:yellow;*/
+	margin:0px auto;
+	border:7px solid #f0f0f0;
+	border-width:9px 7px;
+}
+#main form{/* 表单 */
+	width:385px;
+	display:inline-block;/* 能够和其他元素显示在同一行 */
+	/*background:pink;*/
+	margin-left:110px;
+	vertical-align:top;/* 让当前元素的顶端和行内最高元素的顶端对齐 */
+}
+#main form h1{/* 登录 */
+	font-size:26px;
+	color:#333;
+	text-align:center;
+	margin:87px 0px 20px;
+}
+#main #err-msg{/* 错误提示消息 */
+	color:#f00;/*red*/
+	font-size:16px;
+	text-align:center;
+	margin-bottom:9px;
+}
+#main form input{/* 所有的input元素 */
+	width:381px;
+	height:49px;
+	border:2px solid #ededed;
+	margin-bottom:32px;
+	text-indent:46px;
+	color:#999;
+	font-size:16px;
+}
+#main form input[name='username']{/* 用户名输入框 */
+	background-image:url('imgs/u_ico.jpg');
+	background-repeat:no-repeat;
+	background-position: 14px 14px;
+}
+#main form input[name='password']{
+	background:url('imgs/p_ico.jpg') no-repeat 14px 14px;/* 复合属性 */
+}
+#main form input[type='submit']{/* 登录按钮 */
+	color:#fff;
+	font-size:20px;
+	background:#f00;
+	text-indent:0px;/* 取消首行缩进 */
+	height:52px;
+}
+
+/* ----- footer ----- */
+#footer{
+	width:1200px;
+	height:100px;
+	/*background:cyan;*/
+	margin:0px auto;
+	
+	margin-top:144px;
+	line-height:34px;
+	font-size:14px;
+	color:#999;
+	text-align:center;
+}

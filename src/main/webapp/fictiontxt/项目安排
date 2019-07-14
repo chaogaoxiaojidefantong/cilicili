@@ -1,0 +1,1 @@
+session里会存每本小说的对象，每本小说对应的属性名为request.getContextPath()+fictionid+fiction.getFictionid()

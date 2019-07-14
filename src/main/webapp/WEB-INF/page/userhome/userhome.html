@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>个人中心</title>
+<script src="js/jquery-1.4.2.js"></script>	
+<link rel="stylesheet" href="css/headerandfoot.css"/>
+<script type="text/javascript">
+$(function(){
+	var url="header.do";
+	var footurl="footer.do";
+	$(".header").load(url);
+	$(".footer").load(footurl);
+	 userhomeurl="user/userhome.do";
+	allcollect=$(".allcollect");
+	$.post(userhomeurl,function(result){
+		doallcollect(result.data);				
+	});
+	
+	$(".select").click(function(){
+      	var b="";
+        $(":checked").each(function(){
+     	 ids=$(this).attr("name");
+     		if(ids.length>0){
+     		   	b=b.concat(ids+",");
+     		}
+     	})      	
+     	ids=b.substring(0,b.length-1);
+       
+     	if(ids.length==0){
+     		alert("请先选择要删除的书籍哦亲");
+     	} else{
+     		var cancelparams={"ids":ids};//是字符串
+     		var cancelcollecturl="UserCollect/cancelcollect.do";
+     		$.post(cancelcollecturl,cancelparams,function(result){
+     			if(result.data==0){
+     				alert("删除失败");
+     			}
+     			else{
+     				$.post(userhomeurl,function(result){
+     					doallcollect(result.data);				
+     				});
+     			}
+     		})
+     	}
+     	
+	})
+	
+	 $(".right-content .all").click(function(){      
+      var c=$(this).attr("checked");      
+        $("input[type='checkbox']").attr("checked",c);	       
+        })
+	
+})
+
+
+function doallcollect(result){
+		$(allcollect).empty();
+		var phonenumber=result.phonenumber;
+		//var pho="<p>"+phonenumber+"</p>";//用来测试注册后用户是否已更换
+		//allcollect=$(allcollect).append(pho);
+		var fictions=result.fictions;		
+		for(var i=0;i<fictions.length;i++){
+			var fictionid=fictions[i].fictionid;
+			var fictionname=fictions[i].fictionname;
+			var author=fictions[i].author;
+			var needmember=fictions[i].needmember;
+			var br="<br/>";
+			var fictionnamediv="<div><a href=''>"+fictionname+"</a></div>";
+			var authordiv="<div><p>"+author+"</p></div>";
+			var cancel="<div><input type='checkbox' name='"+fictionid+"'/>取消收藏</div>";
+			var neeedmemberdiv="<div><p>"+needmember+"</p></div>";
+			allcollect=$(allcollect).append(br);
+			allcollect=$(allcollect).append(fictionnamediv);
+			allcollect=$(allcollect).append(authordiv);
+			allcollect=$(allcollect).append(cancel);
+			allcollect=$(allcollect).append(neeedmemberdiv);			
+		}		
+	}
+</script>
+<style type="text/css">	
+		.overall{width:60%;height:700px;margin:auto;}
+		.left-content{display:inline-block;}
+    	 .overall ul{width:40px;height:98%;margin-left:10px;display:inline-block;background-color:#D0D0D0}   	 
+    	 .overall li{padding:5px;list-style:none;}    	 
+    	 .right-content{display:inline-block;margin-left:50px}  	   	 
+    	 .select{text-decoration:none;font-size:20px;color:#FF0000;display:inline-block;margin-left:60px}
+    	 .right-head{display:inline-block;text-align:center;}
+    	 .right-head div{display:inline-block;width:180px;text-align:center;}
+    	 .allcollect div{display:inline-block;width:180px;text-align:center;}		
+</style>
+</head>
+<body>
+<div class="header">hehe</div>
+<img src="img/bili.png"/>
+<div class="overall">
+<div class='left-content'>
+ 	<ul>
+ 	<li>
+ 	首页
+ 	</li>	
+ 	<li>
+ 	大会员
+ 	</li>	
+ 	<li>
+ 	个人中心	 		
+ 	</li>
+ 	</ul>
+ </div>
+ 	
+ 	<div class="right-content">
+ 	
+ 	<div class="right-head">
+	<p>收藏书籍：</p>	
+	<div><p>书籍</p></div>
+	<div><p>作者</p></div>
+	<div><input type="checkbox" class="all"/>"全选取消收藏"</div>
+	<div><p>是否需要会员</p></div>
+	</div>
+	
+	
+	<div class="allcollect"></div>	
+	<br/>
+	<button class="select">删除选中</button>
+	</div>
+ 	</div>	 	
+<div class="footer"></div>
+</body>
+</html>

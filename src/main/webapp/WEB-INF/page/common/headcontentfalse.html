@@ -1,0 +1,32 @@
+<div class="nouser">
+<div id="abc">
+<input type="hidden" name="enews" value="login" >手机号码：
+<input name="phonenumber" type="text" class="inputText" size="10" placeholder="手机号">&nbsp;  
+密码：<input name="password" type="password" class="inputText" size="10" >&nbsp;  
+<button class="inputSub">登录</button>&nbsp; 	   
+<button><a href="regist.do" target="_blank" class="formregistcolor">注册</a></button>
+</div>	
+<script type="text/javascript">
+$(function(){
+	$(".inputSub").click(function(){
+		console.log("hehe");
+		var phonenumber=$("#abc").find("input[type='text']").val();
+		var userpwd=$("#abc").find("input[type='password']").val();	
+		var url="user/login.do";
+		var parms={phonenumber:phonenumber,userpwd:userpwd};
+		$.post(url,parms,function(result){
+			if(result.data==null)
+				alert("密码不正确或用户不存在");
+			else{
+				var url1="headcontenttrue.do";
+				$(".nouser").empty();
+				$(".nouser").load(url1);				
+			}
+		})
+				
+	})	
+	
+	})
+</script>
+</div>
+

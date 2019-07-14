@@ -1,0 +1,38 @@
+<div class="true">
+<span class="line"></span>
+		<B class="havelogin">已登录</B>
+		<span class="qwe"></span>
+		<button class="formregistcolor"><a href="regist.do" target="_blank">注册</a></button>
+		<button class="quit">退出登录</button>
+		<button><a href="userhome.do" target="_blank">个人信息主页</a></button>
+		<button><a href="">多人聊天平台</a></button>		
+		<div class="dropdown">
+  	<span>浏览记录</span>
+  <div class="history">
+ 
+</div>	
+</div>
+<script type="text/javascript">
+$(function(){
+	var url="user/quit.do";
+	$(".quit").click(function(){
+		
+		$(".true").empty();
+		$(".true").load(url);	
+	});
+	
+	var historyurl="user/judgelogin.do";
+	$.post(historyurl,function(result){
+		var history=$(".history");
+		$(history).empty();
+		var historyfictions=result.data.fictionsHistory;
+		for(var i=0;i<historyfictions.length;i++){
+			var historydiv="<div><a href='catelogpage.do?fictionid="+historyfictions[i].fictionid+"'>"+historyfictions[i].fictionname+"</a></div>";
+			history=history.append(historydiv);			
+		}	
+		debugger
+	})
+	
+})
+</script>
+</div>

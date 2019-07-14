@@ -1,0 +1,17 @@
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:54 +0800] "GET / HTTP/1.1" 200 4620 http-bio-8192-exec-1 141
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:54 +0800] "GET /css/headerandfoot.css HTTP/1.1" 200 3981 http-bio-8192-exec-2 4
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:54 +0800] "GET /js/jquery-1.4.2.js HTTP/1.1" 200 163855 http-bio-8192-exec-3 9
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /header.do HTTP/1.1" 200 4328 http-bio-8192-exec-4 14
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /footer.do HTTP/1.1" 200 486 http-bio-8192-exec-6 9
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /favicon.ico HTTP/1.1" 404 973 http-bio-8192-exec-9 9
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "POST /user/judgelogin.do HTTP/1.1" 200 49 http-bio-8192-exec-7 254
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "POST /user/judgelogin.do HTTP/1.1" 200 49 http-bio-8192-exec-10 237
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "POST /Fiction/getfictionbyclick.do HTTP/1.1" 200 1478 http-bio-8192-exec-5 331
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/4.png HTTP/1.1" 200 36325 http-bio-8192-exec-10 5
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/3.png HTTP/1.1" 200 55232 http-bio-8192-exec-5 9
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/1.png HTTP/1.1" 200 68217 http-bio-8192-exec-8 5
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/8.png HTTP/1.1" 200 40627 http-bio-8192-exec-8 5
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/7.png HTTP/1.1" 200 50925 http-bio-8192-exec-5 4
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/2.png HTTP/1.1" 200 54279 http-bio-8192-exec-7 23
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/6.png HTTP/1.1" 200 54486 http-bio-8192-exec-10 6
+0:0:0:0:0:0:0:1 - - [10/Jul/2019:16:35:55 +0800] "GET /img/5.png HTTP/1.1" 200 26636 http-bio-8192-exec-4 5

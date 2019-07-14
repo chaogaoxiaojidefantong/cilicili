@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>搜索结果</title>
+<script src="js/jquery-1.4.2.js"></script>	
+<link rel="stylesheet" href="css/headerandfoot.css"/>
+<style type="text/css">
+.allsearch div{text-align:center;color:#FFFF00;font-size:30px;}
+.allsearch{margin-top:100px;margin-bottom:300px}
+</style>
+<script type="text/javascript">
+$(function(){
+	var url="header.do";
+	var footurl="footer.do";
+	$(".header").load(url);
+	$(".footer").load(footurl);
+	var searchcontent=getQueryString("searchcontent");
+	
+	 allsearch=$(".allsearch");
+	var fictionurl="Fiction/searchcontent.do";
+	var searchparams={"searchcontent":searchcontent};
+	$.post(fictionurl,searchparams,function(result){
+		var fictions=result.data;
+		dolistresult(fictions);				
+	})
+})
+
+function dolistresult(fictions){	
+	for(var i=0;i<fictions.length;i++){
+		var fictionid=fictions[i].fictionid;
+		var fictionname=fictions[i].fictionname;
+		var fictiondiv="<hr/><div><a target='_blank' href='catelogpage.do?fictionid="+fictionid+"'>"+fictionname+"</a></div><hr/>";		
+		allsearch=$(allsearch).append(fictiondiv);		
+	}	
+}
+
+function GetRequest() {	//获取url中的参数
+	var url = location.search; //获取url中"?"符后的字串 	
+	var theRequest = new Object();	
+	if (url.indexOf("?") != -1) {	
+		var str = url.substr(1);	
+		strs = str.split("&");	
+		for (var i = 0; i < strs.length; i++) {	
+			theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+			}	
+		}	
+	return theRequest;
+	}
+	
+	//此方法可解决中文乱码的问题
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 	
+	var r = window.location.search.substr(1).match(reg); 
+	if (r != null) return decodeURI(r[2]);
+	return null; }
+
+
+
+
+
+
+</script>
+</head>
+<body>
+<div class="header"></div>
+<div class="allsearch">
+
+</div>
+<div class="footer"></div>
+</body>
+</html>

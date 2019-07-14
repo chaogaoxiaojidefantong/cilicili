@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>观看</title>
+<script src="js/jquery-1.4.2.js"></script>
+<link rel="stylesheet" href="css/headerandfoot.css"/>
+<script type="text/javascript">
+$(function(){
+	var url="header.do";
+	var footurl="footer.do";	
+	$(".header").load(url);
+	$(".footer").load(footurl);	
+		var Request = GetRequest();   
+		 fictionid= Request["fictionid"]; 
+		 page=Request["page"];
+		 p1=page;
+		 var params={"fictionid":fictionid,"page":page};//page标注的是第几章
+		 
+		  pageurl="Fiction/watch.do";
+		 $.post(pageurl,params,function(result){			 
+			 var list=result.data;
+			article(list);			
+		 });
+		 	commentcurrentPage=1;
+		  commenturl="Comment/watchcomment.do";
+		  p2=parseInt(page);//p2是当前第几章,记得不用page
+		 commentparams={"fictionid":fictionid,"currentPage":commentcurrentPage,"page":p2};		 
+		 $.post(commenturl,commentparams,function(result){			
+			listcomment(result.data);
+		 });
+		 
+		 
+		  
+		 $(".lastpage").click(function(){
+			 p2=p2-1;
+			 if(p2==0){
+				 alert("没有上一页了");
+				 p2=p2+1;
+			 }
+			 else{				
+				p1=(p2).toString();
+				var page=p1;
+				var params={"fictionid":fictionid,"page":page};
+				 $.post(pageurl,params,function(result){			 
+					 var list=result.data;
+					article(list);			
+				 });				
+				 commentparams={"fictionid":fictionid,"currentPage":commentcurrentPage,"page":p2};
+				 $.post(commenturl,commentparams,function(result){			
+						listcomment(result.data);
+					 });
+			 }
+		//	 debugger
+		 });
+		 
+		 $(".nextpage").click(function(){
+			 //p1=(parseInt(p1)+1).toString();
+			 //p1=parseInt(p2)+1;
+			 p2=p2+1;
+			 page=p2.toString();			
+			 var pp={"fictionid":fictionid,"page":page};
+			 $.post(pageurl,pp,function(result){				 
+				 if(result.data.length<1){
+					// p1=(parseInt(p1)-1).toString();
+					p2=p2-1;					 
+					 alert("没有下一章了");
+				 }
+				 else{					
+					 var list=result.data;
+						article(list);												
+						 commentparams={"fictionid":fictionid,"currentPage":commentcurrentPage,"page":p2};
+						 $.post(commenturl,commentparams,function(result){			
+								listcomment(result.data);
+							 });
+				 }
+									 								 			
+			 });			 
+		 });
+		 
+		 $(".lastcomment").click(function(){			
+			 
+		 
+		 });
+		 
+		 $(".publishcomment").click(function(){
+			 var docommenturl="Comment/insertcomment.do";
+			var commentcontent=$(".docomment textarea").val();
+			var fictionidandpage=fictionid+"for"+p2;
+			var docommentparams={"commentcontent":commentcontent,"fictionidandpage":fictionidandpage};
+			 $.post(docommenturl,docommentparams,function(result){			
+					if(result==""){
+						alert("请先登录再评论");
+					}
+					else{						
+						 $.post(commenturl,commentparams,function(result){							 
+								listcomment(result.data);
+								debugger
+							 });
+					}
+				 });
+			
+		 });
+	})
+
+	
+	function article(list){
+	 var bod=$(".bod");
+	 $(bod).empty();
+	 for(var i=0;i<list.length;i++){
+		 var p="<p>"+list[i]+"</p>";
+		 bod=bod.append(p);
+	 }
+}	
+	function listcomment(result){
+		var allcomment=$(".allcomment");
+		$(allcomment).empty();
+		console.log(result);
+		 commentcurrentPage=result.currentPage;//第n页评论
+		var	commentpageSize=result.pageSize;
+		var commentPageCount=result.pageCount;
+		var commentlist=result.records;
+		
+		for(var i=0;i<commentlist.length;i++){
+			var user=commentlist[i].user;
+			var commentcontent=commentlist[i].commentcontent;
+			var commentname=user.username;
+			var time=commentlist[i].nowtime;
+			var comment="<div class='comment'></div>";
+			var hr="<hr />";		
+			var commentname="<div class='commentname'><p>"+commentname+"</p></div>";		
+			var commentcontent="<div class='commentcontent'><p>"+commentcontent+"</p><p class='time'>"+time+"</p></div>"
+			comment=$(comment).append(hr);
+			comment=$(comment).append(commentname);
+			comment=$(comment).append(commentcontent);
+			comment=$(comment).append(hr);
+			allcomment=allcomment.append(comment);
+		}				
+	}
+	
+	
+	function GetRequest() {	//获取url中的参数
+	var url = location.search; //获取url中"?"符后的字串 	
+	var theRequest = new Object();	
+	if (url.indexOf("?") != -1) {	
+		var str = url.substr(1);	
+		strs = str.split("&");	
+		for (var i = 0; i < strs.length; i++) {	
+			theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+			}	
+		}	
+	return theRequest;
+	}
+</script>
+<style type="text/css">
+.bod{background-color:#F0F0F0;width:60%;display:inline-block;margin-left:300px;margin-top:20px} 
+.bod p{font-size:20px;margin-left:4px;margin-top:4px;padding-top:10px;text-indent:40px;}
+.bu button{margin-left:455px;margin-top:20px}
+
+	.allcomment{display:inline-block;margin-left:350px}
+	.comment{background-color:#FFFFFF;width:800px;height:200px;} 
+  .comment .commentname{display:inline-block;width:15%;background-color:#E8E8E8;height:95%;}  
+  .comment .commentname p{margin-top:80px;margin-left:40px;position:absolute;border: 1px solid #73AD21;}  
+ .comment .commentcontent{display:inline-block;width:83%;}
+ .comment .commentcontent p{margin-left:30px;margin-top:15px;}
+ .comment .commentcontent .time{margin-top:130px}
+ .commentbutton{margin:10px 0px 20px 800px}
+ .commentbutton button{margin-left:30px;}
+ 
+ .docomment{width:400px;padding-left:500px;padding-bottom:30px}
+.docomment p{margin-top:20px;margin-left:10px;font-size:15px;font-weight:800}
+ .docomment textarea{width:500px;height:200px;border: 1px solid #73AD21;padding-left:10px;padding-top:10px;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="header"></div>
+<div class="bod"></div>
+<div class="bu"><button class="lastpage">上一章</button><button class="nextpage">下一章</button></div>
+<div class="allcomment">
+</div>
+<div class="commentbutton"><button class="lastcomment">上一页评论</button><button>下一页评论</button><button>尾页评论</button></div>
+
+<div class="docomment">
+<p>发表评论</p>
+<textarea class="writecommentcontent" placeholder="输入评论"></textarea>
+<button class="publishcomment">发表评论</button>
+</div>
+
+<div class="footer"></div>
+</body>
+</html>

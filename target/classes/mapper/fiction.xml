@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.htmlcili.sys.dao.FictionDao">
+<select id="selectAllFictionByClick" resultType="Fiction">
+select * from fiction group by click desc
+</select>
+
+<select id="getAllFictionbyuser" resultType="Fiction">
+select * from usercollect a,fiction b where a.phonenumber=#{phonenumber} and a.fictionid=b.fictionid
+</select>
+<select id="selectfiction" resultType="Fiction">
+select * from Fiction where fictionname like #{searchcontent}
+</select>
+</mapper>
+
+
+

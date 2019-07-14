@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+		<!-- mybatis控制台LOG输出 -->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    <typeAliases>
+       <typeAlias type="com.htmlcili.sys.entity.Fiction" alias="Fiction"/>
+       <typeAlias type="com.htmlcili.sys.entity.User" alias="User"/>
+       <typeAlias type="com.htmlcili.sys.entity.UserCollect" alias="UserCollect"/>
+       <typeAlias type="com.htmlcili.sys.entity.Comment" alias="Comment"/>
+    </typeAliases>
+</configuration>

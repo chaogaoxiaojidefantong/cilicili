@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.htmlcili.sys.dao.CommentDao"> 
+  <select id="findPageObjects" resultType="Comment">
+  select * from comment  where fictionidandpage=#{fictionidandpage} order by nowtime desc limit #{startIndex},#{pageSize}
+  </select>
+ 
+  <select id="findPage" resultType="Comment">
+  select * from comment where fictionidandpage=#{fictionidandpage} order by nowtime 
+  </select>
+  
+  <insert id="insertcomment">
+  insert into comment(fictionidandpage,commentcontent,phonenumber,nowtime) values(#{fictionidandpage},#{commentcontent},#{phonenumber},#{nowtime}) 
+  </insert>
+  </mapper>

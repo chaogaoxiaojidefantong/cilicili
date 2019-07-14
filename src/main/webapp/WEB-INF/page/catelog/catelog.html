@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<title>Insert title here</title>
+<style type="text/css">   	 
+    	 .content{border: 1px solid #73AD21;width:50%;margin:auto;margin-top:20px;margin-bottom:30px}   	
+    	 .content .contenthead{display:inline-block;width:88%;}
+    	.content .contenthead .b1{padding-left:50px;}
+    	.content .contenthead input[type='text']{margin-left:370px;}	
+    	.content .middlecontent{display:inline-block;}
+    	.content .middlecontent .a1{padding-left:50px;}   	
+    	.content .middlecontent .a3{padding-left:50px;}
+    	 .content .middlecontent .b2{padding-left:70px;}
+    	 .content .contentfoot{display:inline-block;margin-left:380px;}    	 
+    	 .bod{margin: auto; width: 60%;    padding: 10px; height:500px;}    	
+		.bod img{padding-left: 20px;padding-top:10px;}
+		.bod .introduce{width:40%;margin-left:60px;border:2px solid #73AD21;height:180px;display:inline-block;position:absolute;margin-top: 10px;padding-left:20px;padding-top: 10px;}
+		.bod p{padding-left: 10px;padding-top: 10px;color:#000000}
+		a{text-decoration:none;}
+		.bod h2{padding-left: 10px;}
+		.bod .fictionname2{font-size:30px;padding-left:500px}
+		.bod .bodco .collect{margin-bottom:10px}	
+		
+		@media (max-width:680px){
+		 .content{width:10px;height:20px;margin:0px;padding:0px}   	
+    	 .content .contenthead{width:10px;height:20px;margin:0px;padding:0px}
+    	.content .contenthead .b1{width:10px;height:20px;margin:0px;padding:0px}
+    	.content .contenthead input[type='text']{width:10px;height:20px;margin:0px;padding:0px}	
+    	.content .middlecontent{width:10px;height:20px;margin:0px;padding:0px}
+    	.content .middlecontent .a1{width:10px;height:20px;margin:0px;padding:0px}   	
+    	.content .middlecontent .a3{width:10px;height:20px;margin:0px;padding:0px}
+    	 .content .middlecontent .b2{width:10px;height:20px;margin:0px;padding:0px}
+    	 .content .contentfoot{width:10px;height:20px;margin:0px;padding:0px}    	 
+    	 .bod{width:300px;height:40px;margin:0px;padding:0px}    	
+		.bod img{width:10px;height:20px;margin:0px;padding:0px}
+		.bod .introduce{width:10px;height:20px;margin:0px;padding:0px}
+		.bod p{width:10px;height:20px;margin:0px;padding:0px}
+		a{width:10px;height:20px;margin:0px;padding:0px}
+		.bod h2{width:10px;height:20px;margin:0px;padding:0px}
+		.bod .fictionname2{width:10px;height:20px;margin:0px;padding:0px}
+		.bod .bodco .collect{width:10px;height:20px;margin:0px;padding:0px}	
+		}	
+    	 	</style>
+<script src="js/jquery-1.4.2.js"></script>	
+<link rel="stylesheet" href="css/headerandfoot.css"/>
+<script type="text/javascript">
+$(function(){
+	var url="header.do";
+	var footurl="footer.do";
+	var catelogurl="Fiction/catelog.do";
+	var collecturl="UserCollect/getusercollectstate.do";
+	$(".header").load(url);
+	$(".footer").load(footurl);				  
+	var Request = GetRequest();   
+	 fictionid= Request["fictionid"]; 
+	var params={"fictionid":fictionid};
+	
+	$.post(catelogurl,params,function(result){
+		debugger
+		$(".pageCount").text("总"+result.data.pageCount+"页");	
+		pageSize=result.data.pageSize;
+		pageCount=result.data.pageCount;
+		var fiction=result.data.records[0];		
+		rows=result.data.rows;
+		needmember=fiction.needmember;	
+		dofiction(fiction);	
+		if(needmember=="yes"){
+			dopagemember(result.data);
+		}
+		else{
+			dopage(result.data);//处理免费的书籍	
+		}		
+	})
+		
+	$.post(collecturl,params,function(result){
+		if(result.data==null){
+			userstate=false;//userstate来判断用户是否已经登录，false则是未登录
+		}else{
+			userstate=true;
+		}		
+		if(userstate==true&&result.data==true){
+			$(".docollect").text("已收藏");
+		}
+		else{
+			$(".docollect").text("收藏本书籍");
+		}		
+			})
+	
+	$(".nextPage").click(function(){
+		//var currentPage=$(".currentPage").val();
+		var currentPage=$(".currentPage").data("va");
+		if(currentPage==pageCount){
+			alert("没有下一页了");
+		}
+		else{
+			currentPage=currentPage+1;
+			var result = {currentPage:currentPage,pageSize:pageSize,pageCount:pageCount,rows:rows};
+			if(needmember=="yes"){
+				dopagemember(result);
+			}
+			else{
+				dopage(result);//处理免费的书籍	
+			}
+		}
+		
+	})
+	
+	$(".docollect").click(function(){	
+		if(userstate==false){
+			alert("请先登录再收藏");
+		}
+		else{
+			var docollecturl="UserCollect/collect.do";
+			var docollectparams={"fictionid":fictionid};
+			$.post(docollecturl,docollectparams,function(result){
+				if(result.data==0){
+					alert("收藏失败");					
+				}
+				else{
+					alert("恭喜您,收藏成功");
+					$(".docollect").text("已收藏");
+				}					
+			});
+		}
+		
+	})
+	
+	
+	$(".serch").click(function(){		
+		var val=$(".contenthead").find("input[type='text']").val();		
+		var currentPage=parseInt(val);		
+		var result = {currentPage:currentPage,pageSize:pageSize,pageCount:pageCount,rows:rows};
+		if(needmember=="yes"){
+			dopagemember(result);
+		}
+		else{
+			dopage(result);//处理免费的书籍	
+		}	
+	})
+	
+	
+	$(".endPage").click(function(){	
+		var currentPage=pageCount;
+		var result = {currentPage:currentPage,pageSize:pageSize,pageCount:pageCount,rows:rows};
+		if(needmember=="yes"){
+			dopagemember(result);
+		}
+		else{
+			dopage(result);//处理免费的书籍	
+		}
+	})
+	
+	
+	$(".lastPage").click(function(){
+		var currentPage=$(".currentPage").data("va");
+		if(currentPage==1){
+			alert("没有上一页了");
+		}
+		else{
+			currentPage=currentPage-1;
+			var result = {currentPage:currentPage,pageSize:pageSize,pageCount:pageCount,rows:rows};
+			if(needmember=="yes"){
+				dopagemember(result);
+			}
+			else{
+				dopage(result);//处理免费的书籍	
+			}
+		}
+		
+		
+	});
+	
+	
+	
+	
+})
+
+function dofiction(fiction){
+		 var fictionid=fiction.fictionid;
+		var category=fiction.category;
+		var fictionname=fiction.fictionname;
+		var author=fiction.author;
+		var click=fiction.click;	
+		$(".bod .category").text(category+">");
+		$(".bod .fictionname").text(fictionname);
+		$(".bod .fictionname2").text(fictionname);
+		$(".bod img").attr("src","img/"+fictionid+".png");
+		$(".bod .click").text("点击率："+click);
+		$(".bod .author").text("作者:"+author);
+	}
+
+
+function GetRequest() {	//获取url中的参数
+	var url = location.search; //获取url中"?"符后的字串 	
+	var theRequest = new Object();	
+	if (url.indexOf("?") != -1) {	
+		var str = url.substr(1);	
+		strs = str.split("&");	
+		for (var i = 0; i < strs.length; i++) {	
+			theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+			}	
+		}	
+	return theRequest;
+	}
+	
+	//处理列出分页的界面
+	function dopage(result){
+		var currentPage=result.currentPage;
+		var pageCount=result.pageCount;
+		var pageSize=result.pageSize;
+		var middle=$(".middle");
+		$(middle).empty();
+		if(currentPage!=pageCount){
+			var start=(currentPage-1)*pageSize+1;
+			var end=start+pageSize;
+			for(var i=start;i<end;i++){				
+				var middlecontent="<div class='middlecontent'><a class='a1' href='watchpage.do?fictionid="+fictionid+"&page="+i+"'>第"+i+"章</a></div>";
+				middle=$(middle).append(middlecontent);
+				var br="<hr></hr>";				
+				middle=$(middle).append(br);
+			}			
+			}
+		else{
+			var start=(currentPage-1)*pageSize+1;
+			
+			var end=result.rows;			
+			for(var i=start;i<end+1;i++){				
+				var middlecontent="<div class='middlecontent'><a class='a1' href='watchpage.do?fictionid="+fictionid+"&page="+i+"'>第"+i+"章</a></div>";
+				middle=$(middle).append(middlecontent);
+				var br="<hr></hr>";
+				middle=$(middle).append(br);
+				debugger
+			}	
+		}
+		$(".currentPage").text("第"+result.currentPage+"页");
+		$(".currentPage").data("va",result.currentPage);
+		
+	}
+	
+	function dopagemember(result){
+		var currentPage=result.currentPage;
+		var pageCount=result.pageCount;
+		var pageSize=result.pageSize;
+		var middle=$(".middle");
+		$(middle).empty();
+		if(currentPage!=pageCount&&currentPage<3){
+			var start=(currentPage-1)*pageSize+1;
+			var end=start+pageSize;
+			for(var i=start;i<end;i++){				
+				var middlecontent="<div class='middlecontent'><a class='a1' href='watchpage.do?fictionid="+fictionid+"&page="+i+"'>第"+i+"章——免费</a></div>";
+				middle=$(middle).append(middlecontent);
+				var br="<hr></hr>";				
+				middle=$(middle).append(br);
+			}			
+			}
+		else if(currentPage!=pageCount&&currentPage>2){
+			var start=(currentPage-1)*pageSize+1;
+			var end=start+pageSize;
+			for(var i=start;i<end+1;i++){				
+				var middlecontent="<div class='middlecontent'><a class='a3' href=''>第"+i+"章——会员</a></div>";
+				middle=$(middle).append(middlecontent);
+				var br="<hr></hr>";				
+				middle=$(middle).append(br);
+			}				
+		}
+		else{
+			var start=(currentPage-1)*pageSize+1;
+			console.log(pageCount+"pageco");
+			var end=result.rows;
+			
+			for(var i=start;i<end+1;i++){				
+				var middlecontent="<div class='middlecontent'><a class='a3' href=''>第"+i+"章——会员</a></div>";
+				middle=$(middle).append(middlecontent);
+				var br="<hr></hr>";
+				middle=$(middle).append(br);				
+			}	
+		}
+		$(".currentPage").text("第"+result.currentPage+"页");
+		$(".currentPage").data("va",result.currentPage);
+	}
+	
+	
+</script>
+</head>
+<body>
+
+
+<div class="header"></div>
+
+<div class="bod">		
+    	<a>首页></a><a class="category"></a><a class="fictionname"></a>	
+    	<hr/>		
+    	<div class="fictionname2"></div>
+    	<img src=""/>
+    	<div class="introduce">
+    	  介绍		
+    	</div>
+    	<hr/>
+    	
+    	<div class="bodco">
+    	<p>小说状态：连载中</p>
+    	<p class="click">点击率：</p>
+    	 <p class="author">作者：</p>  	
+    	 <p>txt下载：</p>    	 
+    	 <button class="docollect"></button> 
+    	 <br/>
+    	</div>
+ 
+</div>
+
+
+<div class="content">
+	<div class="contenthead">
+	<b class="b1">章节</b><input type="text" placeholder="搜索页,支持阿拉伯数字"/><input type="submit" value="搜索" class="serch"/>
+	</div>
+	<br />
+	
+	<div class="middle">	
+	</div>
+	
+		
+	<div class="contentfoot">
+	<button class="pageCount"></button><button class="currentPage">第一页</button><button class="lastPage">上一页</button><button class="nextPage">下一页</button><button class="endPage">最后一页</button>
+	</div>
+ 	</div>
+<div class="footer"></div>
+</body>
+</html>

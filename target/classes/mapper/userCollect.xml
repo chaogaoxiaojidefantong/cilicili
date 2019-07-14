@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.htmlcili.sys.dao.UserCollectDao">
+  
+  <delete id="cancelcollectbyuser">
+  delete from usercollect where fictionid=#{fictionid} and phonenumber=#{phonenumber} 
+  </delete>
+  
+ <select id="getusercollect" resultType="UserCollect" parameterType="UserCollect">
+select * from usercollect where fictionid=#{fictionid} and phonenumber=#{phonenumber}
+ </select>
+
+<insert id="collectbyuser">
+insert into usercollect(fictionid,phonenumber) values(#{fictionid},#{phonenumber})
+</insert>
+  </mapper>

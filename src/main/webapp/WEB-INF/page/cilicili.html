@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta charset="UTF-8">
+<title>cilicili书城</title>
+<script src="js/jquery-1.4.2.js"></script>	
+<link rel="stylesheet" href="css/headerandfoot.css"/>
+<script type="text/javascript">
+$(function(){	
+	var url="header.do";
+	var fictionurl="Fiction/getfictionbyclick.do";
+	var footurl="footer.do";
+	$(".header").load(url);
+	$(".footer").load(footurl);
+	$(".report1").click(function(){
+		report();
+	});	
+	$.post(fictionurl,function(result){	    	
+		for(var i=0;i<8;i++){
+			$(".manyimg").append(doimg(result.data[i]));
+		}
+		for(var i=0;i<result.data.length;i++){
+			$(".ull").append(clickrank(result.data[i]));
+				
+		}
+	});
+	
+	
+	
+})
+
+function report(){	
+	var url="user/judgelogin.do";	
+	$.post(url,function(result){
+		if(result.data==undefined){			
+			alert("请先登录亲");
+		}
+		else{
+			$(".report1").attr("href","");
+		}
+	});	
+}
+
+function doimg(result){
+	var divimg="<div class='imgs'></div>";
+	var divdesc="<div class='desc'><h3>"+result.fictionname+"</h3><h6>类别："+result.category+"</h6><h6>作者："+result.author+"</h6></div>";
+	var a="<a target='_blank' href='catelogpage.do?fictionid="+result.fictionid+"'></a>";
+	var img="<img src='img/"+result.fictionid+".png'>";
+	a=$(a).append(img);
+	divimg=$(divimg).append(a);
+	divimg=$(divimg).append(divdesc);	
+	return divimg;
+}
+
+function clickrank(result){
+	var li="<li><a target='_blank' href='catelogpage.do?fictionid="+result.fictionid+"'>"+result.fictionname+"</a></li>";
+	return li;	
+}
+ 
+
+</script>
+
+<style type="text/css">					 			
+	.avv{margin: auto; width: 60%;padding: 10px; height:1500px;}
+	.avv .imgs{display:inline-block;border: 5px ;margin: 15px; width: 20%;height:18%}
+	.avv .imgs .img {display:inline-block;padding-left: 20px;}
+	.report{padding-top:5px;padding-bottom:5px;padding-left:5px}
+div.desc {
+   padding-left: 20px;  
+}
+.avv h3{color:#00FF00}
+.avv .report .hot{color:#FF9900;font-size:20px}
+.avv .report .rep{color:#FF0000}
+
+.manyimg{display:inline-block}
+
+.a2{display:inline-block;width:65%;height:60px;border: 1px solid #73AD21;padding-top:20px;padding-left:10px}
+.a3{display:inline-block;width:25%;height:60px;border: 1px solid #73AD21;padding-top:20px;padding-left:10px}
+.a2 b{color:#FF9900;font-size:30px}
+.a3 b{color:#FF9900;font-size:30px}
+.a4{display:inline-block;width:65%;height:500px;border: 1px solid #73AD21;padding-left:10px}
+.ull{list-style-type:decimal;display:inline-block}
+.ull li{padding-top:33px}
+.ull li a{color:#000000}
+	
+	@media (max-width:680px){
+	.avv{margin:0px; width: 60%;padding: 10px; height:850px;}
+	.avv .imgs{display:inline-block;margin:0px; width:80px;height:150px;padding:0px}
+	.avv .imgs img {width:70px;height:auto}
+	.report{margin: 15px 0px 0px 20px; width:300px;height:40px;padding:0px;font-size:3px}
+div.desc {
+   margin:0px;width:30px;height:40px;padding:0px;font-size:3px}
+ div.desc h3{font-size:3px;width:40px;height:15px;margin:0px}  
+  div.desc h6{font-size:2px;width:80px;height:15px;margin:0px} 
+hr{display:none;}
+.avv h1{font-size:3px;margin:0px 20px 0px 80px;width:300px;height:15px}
+.avv .report .hot{margin: 0px; width:30px;height:40px;padding:0px;font-size:3px}
+.avv .report .rep{margin:0px; width:30px;height:40px;padding:0px;font-size:3px}
+
+.manyimg{width:300px;height:450px;margin:0px 0px 0px 40px;padding:0px}
+
+.a2{display:none;margin:0px; width:180px;height:20px;padding:0px;text-align:center;}
+.a3{display:block;width:100px;height:20px;padding:0px;text-align:center;}
+.a2 b{color:#FF9900;font-size:5px;margin:0px; padding:0px;}
+.a3 b{color:#FF9900;font-size:8px;margin:0px;}
+.a4{display:none;margin: 15px; width:30px;height:40px;padding:0px}
+.ull{display:inline-block;}
+.ull li{margin: 0px; width:50px;height:30px;padding:0px;font-size:6px}
+.ull li a{font-size:6px}
+	}
+
+		</style>
+</head>
+<body>
+<div class="header">hehe</div>
+<div class="avv">
+<div class="report">
+<b class="hot">热门推荐：</b><b class="rep">如果发现本站有违禁小说，请马上</b><a href="" class="report1">举报</a><b class="rep">或者发送邮件(759646095@qq.com),营造和谐社会，人人有责。</b>
+</div>
+<hr/>
+
+<h1>承接外包工作：电话联系18281635009</h1>
+
+<div class="manyimg">
+
+</div>
+
+<div class="a2">
+<b>刚刚更新的：</b>
+</div>
+<div class="a3">
+<b>点击排行榜</b>
+</div>
+<hr/>
+
+<div class="a4">
+</div>
+
+<ul class="ull"> 
+ 	
+</ul>
+</div>
+<div class="footer"></div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<div id="top">   
+	  <a class="pp" href=".do">首页</a>
+	  <span class="line"></span>
+	  <a class="pp" href="">书库榜单</a>
+	  <div class="headercontent">	  
+	
+	 <div class="nouser">
+<div id="abc">
+<input type="hidden" name="enews" value="login" >手机号码：
+<input name="phonenumber" type="text" class="inputText" size="10" placeholder="手机号">&nbsp;  
+密码：<input name="password" type="password" class="inputText" size="10" >&nbsp;  
+<button class="inputSub">登录</button>&nbsp; 	   
+<button><a href="regist.do" target="_blank" class="formregistcolor">注册</a></button>
+</div>
+</div>	
+
+<div class="true">
+<span class="line"></span>
+		<B class="havelogin">已登录</B>
+		<span class="qwe"></span>
+		<button class="formregistcolor"><a href="regist.do" target="_blank">注册</a></button>
+		<button class="quit">退出登录</button>
+		<button><a href="userhome.do" target="_blank">个人信息主页</a></button>
+		<button><a href="">多人聊天平台</a></button>		
+		<div class="dropdown">
+  	<span>浏览记录</span>
+  <div class="history">
+ 
+</div>	
+</div>
+</div>
+
+	  </div>
+	  <div class="top2">  		
+    	<div class="intop2">      		   
+    <div class="search">
+    <input type="text" name="searchcontent" class="searchcontent" placeholder="神奇的搜索"/>	
+    <a href="" class="searchbutton">搜书</a>
+     <a href="" class="contribute">投稿</a>
+    </div>
+   
+     <ul class="channel-nav-list">
+  <li><a target="_blank" href="/RequestMagic">玄幻魔法</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="/MartialRequest">武侠修真</a></li>
+  <span class="line"></span>
+  <li><a  target="_blank" href="">纯爱耽美</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">都市言情</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">职场校园</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">穿越重生</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">历史军事</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">网游动漫</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">恐怖灵异</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">科幻小说</a></li>
+  <span class="line"></span>
+  <li><a target="_blank" href="">美文名著</a></li>
+       </ul>   
+    </div>      
+    </div>	 
+<script type="text/javascript">	
+	$(function(){
+		
+		var judgeloginurl="user/judgelogin.do";
+		$.post(judgeloginurl,function(result){
+			if(result.data==null){	
+				
+				$(".true").css({"display":"none"});
+			}
+			else{
+				$(".nouser").css("display","none");
+				$(".true").css({"display":"inline-block"});
+			}
+			
+		})		
+		
+		$(".search .searchbutton").click(function(){
+			var searchcontent=$(".searchcontent").val();
+			if(searchcontent.trim()==""){
+				alert("不能输入空值");
+			}
+			else{
+				$(this).attr("href","searchfictionbycontent.do?searchcontent="+searchcontent);	
+			}				
+		});
+				
+		
+		$(".contribute").click(function(){
+			var j1="user/judgelogin.do";
+		})	
+		
+		var url="user/quit.do";
+	$(".quit").click(function(){
+		
+		$(".true").empty();
+		$(".true").load(url);	
+	});
+	
+	var historyurl="user/judgelogin.do";
+	$.post(historyurl,function(result){		
+		if(result.data!=null){
+			
+			var history=$(".history");
+			$(history).empty();
+			var historyfictions=result.data.fictionsHistory;
+			for(var i=0;i<historyfictions.length;i++){
+				var historydiv="<div><a href='catelogpage.do?fictionid="+historyfictions[i].fictionid+"'>"+historyfictions[i].fictionname+"</a></div>";
+				history=history.append(historydiv);			
+			}				
+		}		
+	})
+	
+	
+	$(".inputSub").click(function(){
+		console.log("hehe");
+		var phonenumber=$("#abc").find("input[type='text']").val();
+		var userpwd=$("#abc").find("input[type='password']").val();	
+		var url="user/login.do";
+		var parms={phonenumber:phonenumber,userpwd:userpwd};
+		$.post(url,parms,function(result){
+			if(result.data==null)
+				alert("密码不正确或用户不存在");
+			else{
+				var url1="headcontenttrue.do";
+				$(".nouser").empty();
+				$(".nouser").load(url1);				
+			}
+		})				
+	})		
+	})
+	
+	
+</script>
+</div>
